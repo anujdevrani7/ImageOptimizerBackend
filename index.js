@@ -12,11 +12,89 @@ const corsOption={
     origin:"http://localhost:3000"
 }
 app.use(cors(corsOption))
-app.use('/public', express.static(path.join(__dirname, 'public')));
-app.listen(7000,()=>{
-    console.log("app is running on port no 7000")
-})
-app.get("/getimages",async(req,res)=>{
+app.use('/public', express.static(path.join(__dirname, 'public'),{
+    'cacheControl':'public',
+    maxAge:'1d'
+}));
+
+app.get("/getimages/about", async (req, res) => { 
+    let response=[];
+    const imageArray=[
+        "http://localhost:7000/public/images/5.jpg",
+        "http://localhost:7000/public/images/6.jpg",
+        "http://localhost:7000/public/images/7.jpg",
+        "http://localhost:7000/public/images/8.jpg",
+    ];
+    for(let imageurl of imageArray){
+        try{
+            const blurUrl=await generateBlur(imageurl);
+            response.push({
+                image:imageurl,
+                blurImage:blurUrl
+            })
+        }
+        catch(err){
+            console.log("error is : ",err)
+        }
+    }
+    res.send({
+        data:response,
+        status:"ok report"
+    })
+});
+app.get("/getimages/contact", async (req, res) => { 
+    let response=[];
+    const imageArray=[
+        "http://localhost:7000/public/images/9.jpg",
+        "http://localhost:7000/public/images/10.jpg",
+        "http://localhost:7000/public/images/11.jpg",
+        "http://localhost:7000/public/images/12.jpg",
+    ];
+    for(let imageurl of imageArray){
+        try{
+            const blurUrl=await generateBlur(imageurl);
+            response.push({
+                image:imageurl,
+                blurImage:blurUrl
+            })
+        }
+        catch(err){
+            console.log("error is : ",err)
+        }
+    }
+    res.send({
+        data:response,
+        status:"ok report"
+    })
+});
+app.get("/getimages/services", async (req, res) => { 
+    let response=[];
+    const imageArray=[
+        "http://localhost:7000/public/images/13.jpg",
+        "http://localhost:7000/public/images/14.jpg",
+        "http://localhost:7000/public/images/15.jpg",
+        "http://localhost:7000/public/images/16.jpg",
+    ];
+    for(let imageurl of imageArray){
+        try{
+            const blurUrl=await generateBlur(imageurl);
+            response.push({
+                image:imageurl,
+                blurImage:blurUrl
+            })
+        }
+        catch(err){
+            console.log("error is : ",err)
+        }
+    }
+    res.send({
+        data:response,
+        status:"ok report"
+    })
+});
+
+
+app.get("/getimages/home",async(req,res)=>{
     let response=[];
     const imageArray=[
         "http://localhost:7000/public/images/1.jpg",
@@ -42,6 +120,11 @@ app.get("/getimages",async(req,res)=>{
     })
 })
 
+
+
+
+
+
 const generateBlur=async(imageUrl)=>{
     try {
         const imageResponse=await fetch(imageUrl)
@@ -57,3 +140,6 @@ const generateBlur=async(imageUrl)=>{
         console.log("error is  : ",error)
     }
 }
+app.listen(7000,()=>{
+    console.log("app is running on port no 7000")
+})
